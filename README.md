@@ -1,2 +1,2 @@
-# anki-buff
-Load words from Google Translate to Anki
+# Yoinki
+Extension that loads words from Google Translate to Anki
