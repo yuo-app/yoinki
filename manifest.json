@@ -6,9 +6,14 @@
     "background": {
         "service_worker": "/background.js"
     },
+    "icons": {
+        "16": "assests/icon-16.png",
+        "32": "assests/icon-32.png",
+        "48": "assests/icon-48.png",
+        "128": "assests/icon-128.png"
+    },
     "action": {
-        "default_popup": "popup.html",
-        "default_icon": "assets/logo.png"
+        "default_popup": "popup.html"
     },
     "content_scripts": [
         {
@@ -16,7 +21,7 @@
                 "<all_urls>"
             ],
             "js": [
-                "/content.js"
+                "/content.ts"
             ]
         }
     ],
