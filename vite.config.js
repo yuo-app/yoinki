@@ -1,7 +1,11 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import WindiCSS from 'vite-plugin-windicss'
 
 export default defineConfig({
+    plugins: [
+        WindiCSS(),
+    ],
     build: {
         rollupOptions: {
             input: {
@@ -9,5 +13,5 @@ export default defineConfig({
                 popup: resolve(__dirname, 'src/popup/popup.html'),
             }
         }
-    }
+    },
 })
