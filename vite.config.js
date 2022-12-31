@@ -11,7 +11,7 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, 'index.html'),
                 popup: resolve(__dirname, 'src/popup/popup.html'),
-            }
+            },
         }
     },
 })
