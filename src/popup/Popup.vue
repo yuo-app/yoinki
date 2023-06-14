@@ -7,16 +7,17 @@ function openOptionsPage() {
 </script>
 
 <template>
-  <main class="w-[300px] px-4 py-5 text-center text-gray-700">
-    <Logo />
-    <div>Popup</div>
-    <SharedSubtitle />
-
-    <button class="btn mt-2" @click="openOptionsPage">
-      Open Options
-    </button>
-    <div class="mt-2">
-      <span class="opacity-50">Storage:</span> {{ storageDemo }}
+  <main flex="~ col" justify-between items-center h-200px w-300px px-4 py-5 text-center>
+    <div flex="~ row" w-full gap-2 items-center>
+      <input v-model="storageDemo" text-sm w-full bg-lightblue-2 p-1.5 rounded-lg>
+      <button
+        i-solar:round-alt-arrow-right-bold
+        btn-lightblue w-7 h-7
+        @click="storageDemo = ''"
+      />
     </div>
+    <button @click="openOptionsPage">
+      Options
+    </button>
   </main>
 </template>
