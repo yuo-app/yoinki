@@ -30,7 +30,8 @@
     "test:e2e": "playwright test",
     "postinstall": "simple-git-hooks",
     "typecheck": "vite build && tsc --noEmit",
-    "release": "echo 'Don't forget to preview the extension!' && bumpp"
+    "release": "echo 'Don't forget to preview the extension!' && bumpp",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.36.0",
@@ -53,11 +54,13 @@
     "eslint": "^8.42.0",
     "esno": "^0.16.3",
     "fs-extra": "^11.1.1",
+    "husky": "^8.0.0",
     "jsdom": "^21.1.2",
     "kolorist": "^1.8.0",
     "lint-staged": "^13.2.2",
     "npm-run-all": "^4.1.5",
     "rimraf": "^4.4.1",
+    "semantic-commit-emoji": "^0.6.2",
     "simple-git-hooks": "^2.8.1",
     "typescript": "^4.9.5",
     "unocss": "^0.51.13",
@@ -71,9 +74,6 @@
     "web-ext": "^7.6.2",
     "webext-bridge": "^6.0.1",
     "webextension-polyfill": "^0.10.0"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
     "*": "eslint --fix"
