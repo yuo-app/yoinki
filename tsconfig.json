@@ -1,22 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "moduleResolution": "Node",
+    "baseUrl": ".",
+    "module": "esnext",
+    "target": "es2016",
+    "lib": ["dom", "esnext"],
     "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
     "esModuleInterop": true,
-    "noEmit": true,
+    "incremental": false,
+    "skipLibCheck": true,
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "skipLibCheck": true
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "vite/client"
+    ],
+    "paths": {
+      "~/*": ["src/*"]
+    }
   },
-  "types": ["chrome"],
-  "include": ["src"]
+  "exclude": ["dist", "node_modules"]
 }
