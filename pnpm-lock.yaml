@@ -96,8 +96,8 @@ devDependencies:
     specifier: ^0.51.13
     version: 0.51.13(postcss@8.4.24)(vite@4.3.9)
   unplugin-auto-import:
-    specifier: ^0.15.3
-    version: 0.15.3(@vueuse/core@10.1.2)
+    specifier: ^0.16.4
+    version: 0.16.4(@vueuse/core@10.1.2)
   unplugin-icons:
     specifier: ^0.16.3
     version: 0.16.3(@vue/compiler-sfc@3.3.4)
@@ -6930,8 +6930,8 @@ packages:
       - vite
     dev: true
 
-  /unplugin-auto-import@0.15.3(@vueuse/core@10.1.2):
-    resolution: {integrity: sha512-RLT8SqbPn4bT7yBshZId0uPSofKWnwr66RyDaxWaFb/+f7OTDOWAsVNz+hOQLBWSjvbekr2xZY9ccS8TDHJbCQ==}
+  /unplugin-auto-import@0.16.4(@vueuse/core@10.1.2):
+    resolution: {integrity: sha512-xdgBa9NAS3JG8HjkAZHSbGSMlrjKpaWKXGUzaF6RzEtr980RCl1t0Zsu0skUInNYrEQfqaHc7aGWPv41DLTK/w==}
     engines: {node: '>=14'}
     peerDependencies:
       '@nuxt/kit': ^3.2.2
