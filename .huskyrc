@@ -1,4 +1,2 @@
-export const hooks = {
-  "pre-commit": "lint-staged",
-  "commit-msg": "commitlint -E HUSKY_GIT_PARAMS && yarn node ./packages/cli/dist/cli.js $HUSKY_GIT_PARAMS",
-}
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" q
