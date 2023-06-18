@@ -1,7 +1,7 @@
 {
   "name": "yoinki",
   "displayName": "Yoinki",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "packageManager": "pnpm@8.6.2",
   "description": "[description]",
@@ -29,8 +29,7 @@
     "test": "vitest test",
     "test:e2e": "playwright test",
     "typecheck": "vite build && tsc --noEmit",
-    "release": "echo 'Don't forget to preview the extension!' && bumpp",
-    "prepare": "husky install"
+    "release": "echo 'Don't forget to preview the extension!' && bumpp"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.36.0",
@@ -54,7 +53,6 @@
     "eslint": "^8.42.0",
     "esno": "^0.16.3",
     "fs-extra": "^11.1.1",
-    "husky": "^8.0.0",
     "jsdom": "^21.1.2",
     "kolorist": "^1.8.0",
     "lint-staged": "^13.2.2",
