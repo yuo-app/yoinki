@@ -41,6 +41,9 @@ devDependencies:
   '@vue/test-utils':
     specifier: ^2.3.2
     version: 2.3.2(vue@3.3.4)
+  '@vueform/multiselect':
+    specifier: ^2.6.2
+    version: 2.6.2
   '@vueuse/core':
     specifier: ^10.1.2
     version: 10.1.2(vue@3.3.4)
@@ -1358,6 +1361,10 @@ packages:
     optionalDependencies:
       '@vue/compiler-dom': 3.3.4
       '@vue/server-renderer': 3.3.4(vue@3.3.4)
+    dev: true
+
+  /@vueform/multiselect@2.6.2:
+    resolution: {integrity: sha512-4BFvXyzyi0Pqi/lsYdGwONsQy+ypiVzuQbmoDUlttTxuoujFtf9AdeHi1ZhfIorXG9BiysK1HcQSfYB6USgwfQ==}
     dev: true
 
   /@vueuse/core@10.1.2(vue@3.3.4):

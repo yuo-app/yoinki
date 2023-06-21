@@ -5,3 +5,20 @@ body,
   padding: 0;
   @apply font-sans text-lightblue-8;
 }
+
+:root {
+  --ms-font-size: .9rem;
+  --ms-line-height: 1;
+  --ms-ring-color: #0ea5e930;
+
+  --ms-spinner-color: #0ea5e9;
+
+  --ms-tag-bg: #0ea5e9;
+
+  --ms-group-label-bg-selected: #0099e6;
+  --ms-group-label-bg-selected-pointed: #0099d6;
+  --ms-group-label-bg-selected-disabled: #51a8ca; 
+
+  --ms-option-bg-selected: #0ea5e9;
+  --ms-option-bg-selected-pointed: #26b2f2; 
+}

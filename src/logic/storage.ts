@@ -1,3 +1,5 @@
 import { useStorageLocal } from '~/composables/useStorageLocal'
 
-export const storageDemo = useStorageLocal('webext-demo', 'Storage Demo')
+const prefix = 'yoinki'
+
+export const storageWord = useStorageLocal(`${prefix}-word`, 'lest')
