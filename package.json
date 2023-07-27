@@ -3,7 +3,7 @@
   "displayName": "Yoinki",
   "version": "0.0.2",
   "private": true,
-  "packageManager": "pnpm@8.6.2",
+  "packageManager": "pnpm@8.6.3",
   "description": "[description]",
   "author": "Rettend",
   "scripts": {
@@ -46,6 +46,7 @@
     "@vue/compiler-sfc": "^3.3.4",
     "@vue/test-utils": "^2.4.1",
     "@vueuse/core": "^10.2.0",
+    "@vueform/multiselect": "^2.6.2",
     "bumpp": "^9.1.1",
     "chokidar": "^3.5.3",
     "cross-env": "^7.0.3",
