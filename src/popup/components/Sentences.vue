@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { Tab } from '~/logic/types'
-import { storageWord } from '~/logic/storage'
+import { storage } from '~/logic/storage'
 
 const emit = defineEmits<{
   (event: 'changeTab', tab: Tab): void
@@ -22,7 +22,7 @@ const sentenceResults = ref([
 ])
 
 function styleResult(result: string) {
-  return result.replace(storageWord.value, `<b>${storageWord.value}</b>`)
+  return result.replace(storage.value.word.toString(), `<b>${storage.value.word}</b>`)
 }
 </script>
 
@@ -30,12 +30,12 @@ function styleResult(result: string) {
   <div flex="~ col" w-full gap-5 items-center>
     <div flex="~ col" w-full gap-2>
       <button
-        i-solar:arrow-left-bold
-        btn-lightblue w-7 h-7 absolute top-2 left-2
+        i-solar:alt-arrow-left-bold
+        btn-lightblue w-7 h-7 absolute top-4 left-1
         @click="emit('changeTab', 'Default')"
       />
       <p>
-        {{ storageWord }}
+        {{ storage.word }}
       </p>
     </div>
     <div flex="~ col" w-full gap-3>
@@ -44,9 +44,8 @@ function styleResult(result: string) {
         flex="~ row" w-full gap-3 cursor-pointer
       >
         <p
-          text-xl relative w-0 my-a font-bold
+          text-xl relative w-0 my-a font-bold left--1
           :text="result.selected ? 'lightblue-5' : 'lightblue-8'"
-          :left="result.selected ? '-2' : '1'"
         >
           {{ index + 1 }}.
         </p>

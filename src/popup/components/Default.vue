@@ -1,37 +1,34 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect'
-import { storageWord } from '~/logic/storage'
+import { storage } from '~/logic/storage'
 import type { Tab } from '~/logic/types'
 
 const emit = defineEmits<{
   (event: 'changeTab', tab: Tab): void
 }>()
 
-const searchEnabled = ref(false)
-const generateCount = ref(1)
-const selectedModel = ref('gpt-4')
-const sourceLanguage = ref('English')
-const targetLanguage = ref('Korean')
-
-const settings = [
+const settings = computed(() => [
   {
     label: 'Search',
-    value: searchEnabled.value,
+    value: storage.value.searchEnabled,
+    id: 'searchEnabled',
     type: 'checkbox',
   },
   {
     label: 'Generate',
-    value: generateCount.value,
+    value: storage.value.generateCount,
+    id: 'generateCount',
     type: 'number',
     min: 1,
     max: 5,
   },
   {
     label: 'Model',
-    value: selectedModel.value,
+    value: storage.value.selectedModel,
+    id: 'selectedModel',
     type: 'Multiselect',
   },
-]
+])
 
 const languages = [
   'English',
@@ -46,21 +43,23 @@ const models = [
   'gpt-4',
 ]
 
-const languageSelections = [
+const languageSelections = computed(() => [
   {
     label: 'Source',
-    value: sourceLanguage,
+    value: storage.value.sourceLanguage,
+    id: 'sourceLanguage',
   },
   {
     label: 'Target',
-    value: targetLanguage,
+    value: storage.value.targetLanguage,
+    id: 'targetLanguage',
   },
-]
+])
 </script>
 
 <template>
   <div flex="~ row" w-full gap-2 items-center>
-    <input v-model="storageWord" w-full bg-lightblue-2 p-1.5 rounded-lg>
+    <input v-model="storage.word" w-full bg-lightblue-2 p-1.5 rounded-lg>
     <button
       i-solar:round-alt-arrow-right-bold
       btn-lightblue w-7 h-7
@@ -79,6 +78,7 @@ const languageSelections = [
           :options="models"
           :searchable="true"
           w-50
+          @change="storage[setting.id] = $event"
         />
       </template>
       <template v-else>
@@ -88,6 +88,9 @@ const languageSelections = [
           :min="setting.min"
           :max="setting.max"
           w-10
+          @input="storage[setting.id] = setting.type === 'number'
+            ? ($event.target as HTMLInputElement).value
+            : ($event.target as HTMLInputElement).checked"
         >
       </template>
     </div>
@@ -105,6 +108,7 @@ const languageSelections = [
         :options="languages"
         :searchable="true"
         open-direction="top"
+        @change="storage[language.id] = $event"
       />
     </div>
   </div>
