@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { storage } from '~/logic/storage'
+import Agent from '~/components/Agent.vue'
 
 const options = computed(() => [
   {
@@ -43,6 +44,12 @@ const options = computed(() => [
         </div>
       </div>
     </div>
+    <Suspense>
+      <Agent />
+      <template #fallback>
+        Loading...
+      </template>
+    </Suspense>
   </main>
 </template>
 
