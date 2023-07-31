@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect'
-import { storage } from '~/logic/storage'
-import type { Tab } from '~/logic/types'
+import { resultStorage, storage } from '~/logic/storage'
+import { agent } from '~/logic/agent'
+import { type Tab, languages, levels, models } from '~/logic/types'
 
 const emit = defineEmits<{
   (event: 'changeTab', tab: Tab): void
@@ -23,25 +24,27 @@ const settings = computed(() => [
     max: 5,
   },
   {
+    label: 'Level',
+    value: storage.value.level,
+    id: 'level',
+    type: 'Multiselect',
+  },
+  {
     label: 'Model',
     value: storage.value.selectedModel,
     id: 'selectedModel',
     type: 'Multiselect',
   },
+  {
+    label: 'Temperature',
+    value: storage.value.temperature,
+    id: 'temperature',
+    type: 'number',
+    min: 0,
+    max: 1,
+    step: 0.1,
+  },
 ])
-
-const languages = [
-  'English',
-  'French',
-  'German',
-  'Spanish',
-  'Korean',
-]
-
-const models = [
-  'gpt-3.5-turbo',
-  'gpt-4',
-]
 
 const languageSelections = computed(() => [
   {
@@ -55,6 +58,25 @@ const languageSelections = computed(() => [
     id: 'targetLanguage',
   },
 ])
+
+async function send() {
+  console.log('storage', storage.value)
+  const result = await agent(
+    storage.value,
+  )({}, { render: true })
+
+  console.log('result', result)
+
+  const sentences = JSON.parse(result.toString().split('json')[1])
+  console.log('sentences', sentences)
+
+  resultStorage.value = sentences.map((sentence: any) => ({
+    text: sentence.sentence,
+    selected: false,
+  }))
+
+  console.log(resultStorage.value)
+}
 </script>
 
 <template>
@@ -63,7 +85,7 @@ const languageSelections = computed(() => [
     <button
       i-solar:round-alt-arrow-right-bold
       btn-lightblue w-7 h-7
-      @click="emit('changeTab', 'Sentences')"
+      @click="emit('changeTab', 'Sentences'); send()"
     />
   </div>
   <p font-bold>
@@ -75,11 +97,12 @@ const languageSelections = computed(() => [
       <template v-if="setting.type === 'Multiselect'">
         <Multiselect
           v-model="setting.value"
-          :options="models"
+          :options="setting.id === 'selectedModel' ? models : levels"
           :searchable="true"
           w-50
           @change="storage[setting.id] = $event"
         />
+        <!-- @change="storage[setting.id] = isNaN($event) ? $event : Number($event)" -->
       </template>
       <template v-else>
         <input
@@ -87,7 +110,8 @@ const languageSelections = computed(() => [
           :type="setting.type"
           :min="setting.min"
           :max="setting.max"
-          w-10
+          :step="setting.step"
+          w-12 bg-lightblue-1 px-1.5 py-1 rounded-lg text-center
           @input="storage[setting.id] = setting.type === 'number'
             ? ($event.target as HTMLInputElement).value
             : ($event.target as HTMLInputElement).checked"

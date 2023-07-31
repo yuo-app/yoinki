@@ -7,7 +7,7 @@ settings:
 dependencies:
   salutejs:
     specifier: github:Rettend/salute
-    version: github.com/Rettend/salute/b15cf39b4f448f86501a971a03fec984ab8dec7c
+    version: github.com/Rettend/salute/64b664995145dd797bf884a1da76ece5f6aa102f
 
 devDependencies:
   '@antfu/eslint-config':
@@ -7617,8 +7617,8 @@ packages:
       readable-stream: 3.6.2
     dev: true
 
-  github.com/Rettend/salute/b15cf39b4f448f86501a971a03fec984ab8dec7c:
-    resolution: {tarball: https://codeload.github.com/Rettend/salute/tar.gz/b15cf39b4f448f86501a971a03fec984ab8dec7c}
+  github.com/Rettend/salute/64b664995145dd797bf884a1da76ece5f6aa102f:
+    resolution: {tarball: https://codeload.github.com/Rettend/salute/tar.gz/64b664995145dd797bf884a1da76ece5f6aa102f}
     name: salutejs
     version: 0.0.9
     dependencies:

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storage } from '~/logic/storage'
-import Agent from '~/components/Agent.vue'
+import SendButton from '~/components/SendButton.vue'
 
 const options = computed(() => [
   {
@@ -45,7 +45,7 @@ const options = computed(() => [
       </div>
     </div>
     <Suspense>
-      <Agent />
+      <SendButton />
       <template #fallback>
         Loading...
       </template>

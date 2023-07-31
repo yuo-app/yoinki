@@ -1,25 +1,10 @@
 <script lang="ts" setup>
 import type { Tab } from '~/logic/types'
-import { storage } from '~/logic/storage'
+import { resultStorage, storage } from '~/logic/storage'
 
 const emit = defineEmits<{
   (event: 'changeTab', tab: Tab): void
 }>()
-
-const sentenceResults = ref([
-  {
-    text: 'He hurried to finish his homework lest he should miss his favorite show.',
-    selected: false,
-  },
-  {
-    text: 'She kept her distance from the edge of the cliff lest she fall into the abyss.',
-    selected: false,
-  },
-  {
-    text: 'She wore a hat and sunglasses, lest she should be recognized by the paparazzi.',
-    selected: false,
-  },
-])
 
 function styleResult(result: string) {
   return result.replace(storage.value.word.toString(), `<b>${storage.value.word}</b>`)
@@ -40,7 +25,7 @@ function styleResult(result: string) {
     </div>
     <div flex="~ col" w-full gap-3>
       <div
-        v-for="(result, index) in sentenceResults" :key="index"
+        v-for="(result, index) in resultStorage" :key="index"
         flex="~ row" w-full gap-3 cursor-pointer
       >
         <p
@@ -59,8 +44,8 @@ function styleResult(result: string) {
     </div>
     <button
       btn-lightblue px-5
-      :disabled="sentenceResults.every(result => result.selected === false)"
     >
+      <!-- :disabled="resultStorage.every(result => result.selected === false)" -->
       Add
     </button>
   </div>

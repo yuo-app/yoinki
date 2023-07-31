@@ -1,11 +1,13 @@
 <script lang="ts" setup>
+import { storage } from '~/logic'
 import { agent } from '~/logic/agent'
 
 const result = ref<string | null>(null)
 
 async function send() {
   result.value = null
-  result.value = await agent({})
+  result.value = await agent(3, storage.value.openaiApiKey)({})
+  console.log(result.value)
 }
 </script>
 
@@ -17,7 +19,4 @@ async function send() {
   >
     Send
   </button>
-  <pre text-left>
-    {{ result }}
-  </pre>
 </template>
