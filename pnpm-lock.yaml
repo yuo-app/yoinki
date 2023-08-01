@@ -12,8 +12,8 @@ devDependencies:
     specifier: ^3.4.1
     version: 3.4.1
   '@iconify/json':
-    specifier: ^2.2.78
-    version: 2.2.78
+    specifier: ^2.2.96
+    version: 2.2.96
   '@playwright/test':
     specifier: ^1.35.1
     version: 1.35.1
@@ -634,8 +634,8 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@iconify/json@2.2.78:
-    resolution: {integrity: sha512-xNYyxoqBmPO+BnpTREK5WpOCCLi+eTlSF2w4Z1GkxPIWyA0hoL/aYlI4p+hYGmWFYQ2j3og62pOgo3oD6KxNew==}
+  /@iconify/json@2.2.96:
+    resolution: {integrity: sha512-0l8LOn8kiLr8XtJZZhu4hcVyRezU+ntsBgQzjMZaQjcqZ7tfg1KQvD9cuJenz1shIs+VI+7bS2rAhRYjok1mIw==}
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.1
@@ -1424,7 +1424,7 @@ packages:
   /@vueform/multiselect@2.6.2:
     resolution: {integrity: sha512-4BFvXyzyi0Pqi/lsYdGwONsQy+ypiVzuQbmoDUlttTxuoujFtf9AdeHi1ZhfIorXG9BiysK1HcQSfYB6USgwfQ==}
     dev: true
-    
+
   /@vueuse/core@10.2.0(vue@3.3.4):
     resolution: {integrity: sha512-aHBnoCteIS3hFu7ZZkVB93SanVDY6t4TIb7XDLxJT/HQdAZz+2RdIEJ8rj5LUoEJr7Damb5+sJmtpCwGez5ozQ==}
     dependencies:
