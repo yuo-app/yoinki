@@ -38,6 +38,16 @@ export interface GenerationOptions {
   sourceLanguage: Language
   targetLanguage: Language
   sentenceCount: number
-  word: string
   level: Level
+  word: string
+  translation: string
+  definition: string
+  definitionTranslated: string
+}
+
+export interface SentencesStorage {
+  sentence: string
+  sentenceTranslated: string
+  selected: boolean
+  hovered: boolean
 }

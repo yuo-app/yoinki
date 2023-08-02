@@ -1,13 +1,21 @@
 <script lang="ts" setup>
-import type { Tab } from '~/logic/types'
-import { resultStorage, storage } from '~/logic/storage'
+import type { SentencesStorage, Tab } from '~/logic/types'
+import { sentencesStorage, storage } from '~/logic/storage'
 
 const emit = defineEmits<{
   (event: 'changeTab', tab: Tab): void
 }>()
 
-function styleResult(result: string) {
-  return result.replace(storage.value.word.toString(), `<b>${storage.value.word}</b>`)
+storage.value.translation = ''
+storage.value.definition = ''
+storage.value.definitionTranslated = ''
+sentencesStorage.value = []
+
+const calcHeight = (result: SentencesStorage) => {
+  const sentenceRows = Math.ceil(result.sentence.length / 35)
+  const sentenceTranslatedRows = Math.ceil(result.sentenceTranslated.length / 35)
+
+  return Math.max(sentenceRows, sentenceTranslatedRows) * 30
 }
 </script>
 
@@ -20,32 +28,47 @@ function styleResult(result: string) {
         @click="emit('changeTab', 'Default')"
       />
       <p>
-        {{ storage.word }}
+        <b>
+          {{ storage.word }}
+          <br>
+          {{ storage.translation }}
+        </b>
+        <br><br>
+        {{ storage.definition }}
+        <br>
+        {{ storage.definitionTranslated }}
       </p>
     </div>
     <div flex="~ col" w-full gap-3>
       <div
-        v-for="(result, index) in resultStorage" :key="index"
+        v-for="(result, index) in sentencesStorage" :key="index"
         flex="~ row" w-full gap-3 cursor-pointer
       >
         <p
-          text-xl relative w-0 my-a font-bold left--1
+          text-xl relative w-0 my-a font-bold left--2
           :text="result.selected ? 'lightblue-5' : 'lightblue-8'"
         >
           {{ index + 1 }}.
         </p>
-        <span
-          bg-lightblue-1 p-1.5 rounded-lg w-full
+        <div
+          flex w-full items-center bg-lightblue-1 p-1.5 rounded-lg
+          :style="{ height: `${calcHeight(result)}px` }"
           :border="result.selected ? '2 dashed lightblue-5' : '2 solid transparent'"
           @click="result.selected = !result.selected"
-          v-html="styleResult(result.text)"
-        />
+          @mouseover="result.hovered = true"
+          @mouseleave="result.hovered = false"
+        >
+          <span
+            w-full
+            v-html="result.hovered ? result.sentenceTranslated : result.sentence"
+          />
+        </div>
       </div>
     </div>
     <button
       btn-lightblue px-5
     >
-      <!-- :disabled="resultStorage.every(result => result.selected === false)" -->
+      <!-- :disabled="sentencesStorage.every(result => result.selected === false)" -->
       Add
     </button>
   </div>

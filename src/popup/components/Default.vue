@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect'
-import { resultStorage, storage } from '~/logic/storage'
+import { sentencesStorage, storage } from '~/logic/storage'
 import { agent } from '~/logic/agent'
 import { type Tab, languages, levels, models } from '~/logic/types'
 
@@ -17,8 +17,8 @@ const settings = computed(() => [
   },
   {
     label: 'Generate',
-    value: storage.value.generateCount,
-    id: 'generateCount',
+    value: storage.value.sentenceCount,
+    id: 'sentenceCount',
     type: 'number',
     min: 1,
     max: 5,
@@ -65,17 +65,27 @@ async function send() {
     storage.value,
   )({}, { render: true })
 
+  console.log('sentence count', storage.value.sentenceCount)
   console.log('result', result)
 
-  const sentences = JSON.parse(result.toString().split('json')[1])
-  console.log('sentences', sentences)
+  console.log('translation', result.translation)
+  storage.value.translation = result.translation
 
-  resultStorage.value = sentences.map((sentence: any) => ({
-    text: sentence.sentence,
+  console.log('definition', `${result.definition}\n\n${result.definitionTranslated}`)
+  storage.value.definition = result.definition
+  storage.value.definitionTranslated = result.definitionTranslated
+
+  console.log('result.sentences split', `[{"sentence": "${result.sentences}]`)
+  const sentences = JSON.parse(`[{"sentence": "${result.sentences}]`)
+
+  sentencesStorage.value = sentences.map((sentence: any) => ({
+    sentence: sentence.sentence,
+    sentenceTranslated: sentence.sentenceTranslated,
     selected: false,
+    hovered: false,
   }))
 
-  console.log(resultStorage.value)
+  console.log(sentencesStorage.value)
 }
 </script>
 

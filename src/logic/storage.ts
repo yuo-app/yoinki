@@ -1,4 +1,4 @@
-import type { GenerationOptions } from './types'
+import type { GenerationOptions, SentencesStorage } from './types'
 import { useStorageLocal } from '~/composables/useStorageLocal'
 
 export const storage = useStorageLocal<GenerationOptions>(
@@ -12,16 +12,13 @@ export const storage = useStorageLocal<GenerationOptions>(
     sourceLanguage: 'English',
     targetLanguage: 'English',
     word: '',
+    translation: '',
+    definition: '',
+    definitionTranslated: '',
   },
-
 )
 
-interface ResultStorage {
-  text: string
-  selected: boolean
-}
-
-export const resultStorage = useStorageLocal<ResultStorage[]>(
+export const sentencesStorage = useStorageLocal<SentencesStorage[]>(
   'yoinki-result-sentences',
   [],
 )
