@@ -1,25 +1,26 @@
+import type { GenerationOptions, SentencesStorage } from './types'
 import { useStorageLocal } from '~/composables/useStorageLocal'
 
-interface Storage {
-  [key: string]: string | boolean | number | undefined
-  word: string
-  searchEnabled: boolean
-  generateCount: number
-  selectedModel: string
-  sourceLanguage: string
-  targetLanguage: string
-  openaiApiKey?: string
-  bingApiKey?: string
-}
-
-export const storage = useStorageLocal<Storage>(
+export const storage = useStorageLocal<GenerationOptions>(
   'yoinki',
   {
-    word: 'lest',
+    level: 'Advanced',
     searchEnabled: false,
-    generateCount: 1,
     selectedModel: 'gpt-4',
+    temperature: 0.9,
+    sentenceCount: 3,
     sourceLanguage: 'English',
-    targetLanguage: 'Korean',
+    targetLanguage: 'English',
+    word: '',
+    translation: '',
+    definition: '',
+    definitionTranslated: '',
+    sourceLanguageDefinition: true,
+    sourceLanguageSentence: true,
   },
+)
+
+export const sentencesStorage = useStorageLocal<SentencesStorage[]>(
+  'yoinki-result-sentences',
+  [],
 )

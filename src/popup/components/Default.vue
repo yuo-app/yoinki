@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect'
-import { storage } from '~/logic/storage'
-import type { Tab } from '~/logic/types'
+import { sentencesStorage, storage } from '~/logic/storage'
+import { agent } from '~/logic/agent'
+import { type Tab, languages, levels, models } from '~/logic/types'
 
 const emit = defineEmits<{
   (event: 'changeTab', tab: Tab): void
@@ -16,11 +17,17 @@ const settings = computed(() => [
   },
   {
     label: 'Generate',
-    value: storage.value.generateCount,
-    id: 'generateCount',
+    value: storage.value.sentenceCount,
+    id: 'sentenceCount',
     type: 'number',
     min: 1,
     max: 5,
+  },
+  {
+    label: 'Level',
+    value: storage.value.level,
+    id: 'level',
+    type: 'Multiselect',
   },
   {
     label: 'Model',
@@ -28,20 +35,16 @@ const settings = computed(() => [
     id: 'selectedModel',
     type: 'Multiselect',
   },
+  {
+    label: 'Temperature',
+    value: storage.value.temperature,
+    id: 'temperature',
+    type: 'number',
+    min: 0,
+    max: 1,
+    step: 0.1,
+  },
 ])
-
-const languages = [
-  'English',
-  'French',
-  'German',
-  'Spanish',
-  'Korean',
-]
-
-const models = [
-  'gpt-3.5-turbo',
-  'gpt-4',
-]
 
 const languageSelections = computed(() => [
   {
@@ -55,6 +58,25 @@ const languageSelections = computed(() => [
     id: 'targetLanguage',
   },
 ])
+
+async function send() {
+  const result = await agent(
+    storage.value,
+  )({}, { render: true })
+
+  storage.value.translation = result.translation
+  storage.value.definition = result.definition
+  storage.value.definitionTranslated = result.definitionTranslated
+
+  const sentences = JSON.parse(`[{"sentence": ${result.sentences}]`)
+
+  sentencesStorage.value = sentences.map((sentence: any) => ({
+    sentence: sentence.sentence,
+    sentenceTranslated: sentence.sentenceTranslated,
+    selected: false,
+    hovered: false,
+  }))
+}
 </script>
 
 <template>
@@ -63,7 +85,7 @@ const languageSelections = computed(() => [
     <button
       i-solar:round-alt-arrow-right-bold
       btn-lightblue w-7 h-7
-      @click="emit('changeTab', 'Sentences')"
+      @click="emit('changeTab', 'Sentences'); send()"
     />
   </div>
   <p font-bold>
@@ -75,7 +97,7 @@ const languageSelections = computed(() => [
       <template v-if="setting.type === 'Multiselect'">
         <Multiselect
           v-model="setting.value"
-          :options="models"
+          :options="setting.id === 'selectedModel' ? models : levels"
           :searchable="true"
           w-50
           @change="storage[setting.id] = $event"
@@ -87,7 +109,10 @@ const languageSelections = computed(() => [
           :type="setting.type"
           :min="setting.min"
           :max="setting.max"
-          w-10
+          :step="setting.step"
+          :w="setting.type === 'checkbox' ? '4' : '12'"
+          :h="setting.type === 'checkbox' ? '4' : '8'"
+          bg-lightblue-1 px-1.5 py-1 rounded-lg text-center
           @input="storage[setting.id] = setting.type === 'number'
             ? ($event.target as HTMLInputElement).value
             : ($event.target as HTMLInputElement).checked"

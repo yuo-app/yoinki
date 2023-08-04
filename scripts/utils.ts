@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import * as process from 'node:process'
 import { bgCyan, black } from 'kolorist'
 
 export const port = parseInt(process.env.PORT || '') || 3303

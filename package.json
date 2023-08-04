@@ -32,6 +32,9 @@
     "postinstall": "simple-git-hooks",
     "release": "echo 'Don't forget to preview the extension!' && bumpp"
   },
+  "dependencies": {
+    "salutejs": "github:Rettend/salute"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "^0.39.8",
     "@ffflorian/jszip-cli": "^3.4.1",
@@ -45,8 +48,8 @@
     "@vitejs/plugin-vue": "^4.2.3",
     "@vue/compiler-sfc": "^3.3.4",
     "@vue/test-utils": "^2.4.1",
-    "@vueuse/core": "^10.3.0",
     "@vueform/multiselect": "^2.6.2",
+    "@vueuse/core": "^10.3.0",
     "bumpp": "^9.1.1",
     "chokidar": "^3.5.3",
     "cross-env": "^7.0.3",

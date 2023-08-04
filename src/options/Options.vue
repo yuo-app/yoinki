@@ -15,6 +15,19 @@ const options = computed(() => [
     hide: ref(true),
   },
 ])
+
+const languageOptions = computed(() => [
+  {
+    label: 'Definition in Source Language',
+    value: storage.value.sourceLanguageDefinition,
+    id: 'sourceLanguageDefinition',
+  },
+  {
+    label: 'Sentence translations in Source Language',
+    value: storage.value.sourceLanguageSentence,
+    id: 'sourceLanguageSentence',
+  },
+])
 </script>
 
 <template>
@@ -42,8 +55,15 @@ const options = computed(() => [
           />
         </div>
       </div>
+      <div v-for="(option, index) in languageOptions" :key="index" flex="~ row" items-center justify-start w-full gap-5>
+        <label flex-1 text-right text-sm font-bold>{{ option.label }}:</label>
+        <input
+          v-model="option.value"
+          type="checkbox"
+          w-4 h-4 text-left mr="1/2"
+          @change="storage[option.id] = ($event.target as HTMLInputElement).checked"
+        >
+      </div>
     </div>
   </main>
 </template>
-
-<style src="@vueform/multiselect/themes/default.css"></style>
