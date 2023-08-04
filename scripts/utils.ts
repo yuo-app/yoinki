@@ -1,6 +1,6 @@
 import { resolve } from 'node:path'
+import * as process from 'node:process'
 import { bgCyan, black } from 'kolorist'
-require('node:process')
 
 export const port = parseInt(process.env.PORT || '') || 3303
 export const r = (...args: string[]) => resolve(__dirname, '..', ...args)
