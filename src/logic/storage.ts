@@ -15,6 +15,8 @@ export const storage = useStorageLocal<GenerationOptions>(
     translation: '',
     definition: '',
     definitionTranslated: '',
+    sourceLanguageDefinition: true,
+    sourceLanguageSentence: true,
   },
 )
 

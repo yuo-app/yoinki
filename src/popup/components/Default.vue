@@ -60,23 +60,15 @@ const languageSelections = computed(() => [
 ])
 
 async function send() {
-  console.log('storage', storage.value)
   const result = await agent(
     storage.value,
   )({}, { render: true })
 
-  console.log('sentence count', storage.value.sentenceCount)
-  console.log('result', result)
-
-  console.log('translation', result.translation)
   storage.value.translation = result.translation
-
-  console.log('definition', `${result.definition}\n\n${result.definitionTranslated}`)
   storage.value.definition = result.definition
   storage.value.definitionTranslated = result.definitionTranslated
 
-  console.log('result.sentences split', `[{"sentence": "${result.sentences}]`)
-  const sentences = JSON.parse(`[{"sentence": "${result.sentences}]`)
+  const sentences = JSON.parse(`[{"sentence": ${result.sentences}]`)
 
   sentencesStorage.value = sentences.map((sentence: any) => ({
     sentence: sentence.sentence,
@@ -84,8 +76,6 @@ async function send() {
     selected: false,
     hovered: false,
   }))
-
-  console.log(sentencesStorage.value)
 }
 </script>
 
@@ -112,7 +102,6 @@ async function send() {
           w-50
           @change="storage[setting.id] = $event"
         />
-        <!-- @change="storage[setting.id] = isNaN($event) ? $event : Number($event)" -->
       </template>
       <template v-else>
         <input
@@ -121,7 +110,9 @@ async function send() {
           :min="setting.min"
           :max="setting.max"
           :step="setting.step"
-          w-12 bg-lightblue-1 px-1.5 py-1 rounded-lg text-center
+          :w="setting.type === 'checkbox' ? '4' : '12'"
+          :h="setting.type === 'checkbox' ? '4' : '8'"
+          bg-lightblue-1 px-1.5 py-1 rounded-lg text-center
           @input="storage[setting.id] = setting.type === 'number'
             ? ($event.target as HTMLInputElement).value
             : ($event.target as HTMLInputElement).checked"

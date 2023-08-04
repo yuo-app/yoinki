@@ -6,12 +6,15 @@ const emit = defineEmits<{
   (event: 'changeTab', tab: Tab): void
 }>()
 
-storage.value.translation = ''
-storage.value.definition = ''
-storage.value.definitionTranslated = ''
-sentencesStorage.value = []
+// storage.value.translation = ''
+// storage.value.definition = 'Just a moment... 👍'
+// storage.value.definitionTranslated = ''
+// sentencesStorage.value = []
 
 const calcHeight = (result: SentencesStorage) => {
+  if (!result.sentence || !result.sentenceTranslated)
+    return 0
+
   const sentenceRows = Math.ceil(result.sentence.length / 35)
   const sentenceTranslatedRows = Math.ceil(result.sentenceTranslated.length / 35)
 
@@ -67,8 +70,8 @@ const calcHeight = (result: SentencesStorage) => {
     </div>
     <button
       btn-lightblue px-5
+      :disabled="sentencesStorage.every(result => result.selected === false)"
     >
-      <!-- :disabled="sentencesStorage.every(result => result.selected === false)" -->
       Add
     </button>
   </div>

@@ -29,7 +29,7 @@ export const levels = [
 export type Level = typeof levels[number]
 
 export interface GenerationOptions {
-  [key: string]: string | boolean | number | undefined
+  [key: string]: string | boolean | number | object | undefined
   openaiApiKey?: string
   bingApiKey?: string
   searchEnabled: boolean
@@ -43,6 +43,8 @@ export interface GenerationOptions {
   translation: string
   definition: string
   definitionTranslated: string
+  sourceLanguageDefinition: boolean
+  sourceLanguageSentence: boolean
 }
 
 export interface SentencesStorage {
