@@ -11,7 +11,7 @@ const emit = defineEmits<{
 // storage.value.definitionTranslated = ''
 // sentencesStorage.value = []
 
-const calcHeight = (result: SentencesStorage) => {
+function calcHeight(result: SentencesStorage) {
   if (!result.sentence || !result.sentenceTranslated)
     return 0
 

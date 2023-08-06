@@ -8,8 +8,8 @@ updates:
   - package-ecosystem: npm # See documentation for possible values
     directory: / # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: weekly
     groups:
-       dev-dependencies:
-          patterns:
-            - "*"       # Combine all PRs
+      dev-dependencies:
+        patterns:
+          - '*' # Combine all PRs
