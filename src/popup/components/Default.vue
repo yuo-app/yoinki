@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect'
-import { storage } from '~/logic/storage'
 import { agent2 } from '~/logic/agent'
+import { storage } from '~/logic/storage'
 import { type Tab, languages, levels, models } from '~/logic/types'
 
 const emit = defineEmits<{
@@ -62,10 +62,20 @@ const languageSelections = computed(() => [
 async function send() {
   const result = await agent2(
     storage.value.openaiApiKey as string,
+    // storage.value.translation,
   )({ goal: 'read more books' }, { render: true })
-  console.log(result)
-  console.log(result.plan)
+
+  console.log('result', result)
   storage.value.translation = result.plan
+
+  // const result = await agent2(
+  //   storage.value.openaiApiKey as string,
+  // )({ goal: 'read more books' })
+
+  // console.log('result', result)
+
+  // console.log(result.plan)
+  // storage.value.translation = result.plan
 
   // const result = await agent(
   //   storage.value,

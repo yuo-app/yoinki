@@ -1,4 +1,4 @@
-import { assistant, block, createOpenAIChatCompletion, gen, system, user } from 'salutejs'
+import { assistant, block, createOpenAIChatCompletion, gen, system, user } from '../../salute/src'
 import type { GenerationOptions, Level, Model } from './types'
 
 // import { topSnippets } from './search'
@@ -6,11 +6,11 @@ import type { GenerationOptions, Level, Model } from './types'
 function createModel(model: Model, apiKey?: string, temperature?: number) {
   return createOpenAIChatCompletion({
     model,
-    // stream: true,
+    stream: true,
     temperature: Number(temperature), // :pepeYep:
   }, {
     apiKey,
-    // dangerouslyAllowBrowser: true,
+    dangerouslyAllowBrowser: true,
   })
 }
 
@@ -27,23 +27,21 @@ function levelPrompts(level: Level) {
   }
 }
 
-// export function agent2(options: GenerationOptions) {
-//   return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(() => [
-// }
-
 export function agent2(apiKey: string) {
   return createOpenAIChatCompletion({
-    // model: 'gpt-3.5-turbo',
-    model: 'gpt-4',
+    model: 'gpt-3.5-turbo',
+    // model: 'gpt-4',
+    stream: true,
   }, {
     apiKey,
+    dangerouslyAllowBrowser: true,
   })(
     ({ params }) => [
       system`You are a helpful assistant`,
       user`I want to ${params.goal}.`,
-      assistant`${gen('plan', { maxTokens: 100 })}`,
+      assistant`${gen('plan', { maxTokens: 200 })}`,
     ],
-    { stream: true },
+    // { stream: true },
   )
 }
 

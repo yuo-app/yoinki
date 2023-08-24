@@ -1,0 +1,4 @@
+[submodule "salute"]
+	path = salute
+	url = https://github.com/Rettend/salute
+	branch = openai-v4
