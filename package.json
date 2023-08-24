@@ -32,9 +32,6 @@
     "postinstall": "simple-git-hooks",
     "release": "echo 'Don't forget to preview the extension!' && bumpp"
   },
-  "dependencies": {
-    "salutejs": "github:Rettend/salute"
-  },
   "devDependencies": {
     "@antfu/eslint-config": "^0.39.8",
     "@ffflorian/jszip-cli": "^3.4.1",
@@ -83,5 +80,8 @@
   },
   "lint-staged": {
     "*": "eslint --fix"
+  },
+  "dependencies": {
+    "salutejs": "github:Rettend/salute"
   }
 }

@@ -1,13 +1,16 @@
 import { assistant, block, createOpenAIChatCompletion, gen, system, user } from 'salutejs'
 import type { GenerationOptions, Level, Model } from './types'
-import { topSnippets } from './search'
+
+// import { topSnippets } from './search'
 
 function createModel(model: Model, apiKey?: string, temperature?: number) {
   return createOpenAIChatCompletion({
     model,
+    // stream: true,
     temperature: Number(temperature), // :pepeYep:
   }, {
     apiKey,
+    // dangerouslyAllowBrowser: true,
   })
 }
 
@@ -20,8 +23,28 @@ function levelPrompts(level: Level) {
       return 'The sentences should be compound sentences that are diverse and interesting but not too long.'
     case 'Advanced':
       return `The sentences should be compound sentences that are complex, diverse, intriguing and interesting but not too long.
-      I use these to expand my vocabulary, so they contain less common words.`
+      They contain less common words.`
   }
+}
+
+// export function agent2(options: GenerationOptions) {
+//   return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(() => [
+// }
+
+export function agent2(apiKey: string) {
+  return createOpenAIChatCompletion({
+    // model: 'gpt-3.5-turbo',
+    model: 'gpt-4',
+  }, {
+    apiKey,
+  })(
+    ({ params }) => [
+      system`You are a helpful assistant`,
+      user`I want to ${params.goal}.`,
+      assistant`${gen('plan', { maxTokens: 100 })}`,
+    ],
+    { stream: true },
+  )
 }
 
 export function agent(options: GenerationOptions) {
@@ -44,14 +67,17 @@ export function agent(options: GenerationOptions) {
             assistant`
             json
             {
-              "translation": "${gen('translation', { stop: '"', maxTokens: 20 })}"
+              "translation": "${gen('translation', { stop: '"', maxTokens: 30 })}"
             }
           `,
           ],
         ),
       user`
       Define the word (${options.word}) in ${options.targetLanguage} using paraphrasing.
-      Reply with sentences, but keep it short. Do not reply in ${options.sourceLanguage}. Use ${options.targetLanguage}.
+      Reply with sentences, but keep it short.
+      ${(options.sourceLanguage === options.targetLanguage || !options.sourceLanguageSentence)
+        ? ''
+        : `Do not reply in ${options.sourceLanguage}. Use ${options.targetLanguage}.`}
 
       ${levelPrompts(options.level)}
     `,
@@ -71,7 +97,7 @@ export function agent(options: GenerationOptions) {
             assistant`
             json
             {
-              "definitionTranslated": "${gen('definitionTranslated', { stop: '"', maxTokens: 100 })}"
+              "definitionTranslated": "${gen('definitionTranslated', { stop: '}', maxTokens: 100 })}
             }
           `,
           ],

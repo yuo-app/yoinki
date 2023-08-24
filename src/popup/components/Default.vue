@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect'
-import { sentencesStorage, storage } from '~/logic/storage'
-import { agent } from '~/logic/agent'
+import { storage } from '~/logic/storage'
+import { agent2 } from '~/logic/agent'
 import { type Tab, languages, levels, models } from '~/logic/types'
 
 const emit = defineEmits<{
@@ -60,22 +60,29 @@ const languageSelections = computed(() => [
 ])
 
 async function send() {
-  const result = await agent(
-    storage.value,
-  )({}, { render: true })
+  const result = await agent2(
+    storage.value.openaiApiKey as string,
+  )({ goal: 'read more books' }, { render: true })
+  console.log(result)
+  console.log(result.plan)
+  storage.value.translation = result.plan
 
-  storage.value.translation = result.translation
-  storage.value.definition = result.definition
-  storage.value.definitionTranslated = result.definitionTranslated
+  // const result = await agent(
+  //   storage.value,
+  // )({}, { render: true })
 
-  const sentences = JSON.parse(`[{"sentence": ${result.sentences}]`)
+  // storage.value.translation = result.translation
+  // storage.value.definition = result.definition
+  // storage.value.definitionTranslated = result.definitionTranslated
 
-  sentencesStorage.value = sentences.map((sentence: any) => ({
-    sentence: sentence.sentence,
-    sentenceTranslated: sentence.sentenceTranslated,
-    selected: false,
-    hovered: false,
-  }))
+  // const sentences = JSON.parse(`[{"sentence": ${result.sentences}]`)
+
+  // sentencesStorage.value = sentences.map((sentence: any) => ({
+  //   sentence: sentence.sentence,
+  //   sentenceTranslated: sentence.sentenceTranslated,
+  //   selected: false,
+  //   hovered: false,
+  // }))
 }
 </script>
 
