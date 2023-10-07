@@ -1,4 +1,4 @@
-⚠️ On hold, waiting for a better javascript LLM framework.
+⚠️ On hold, waiting for a better javascript-based LLM framework.
 Will just rewrite using openai-node after the semester.
 
 # Yoinki
