@@ -1,14 +1,16 @@
 import { assistant, block, createOpenAIChatCompletion, gen, system, user } from 'salutejs'
 import type { GenerationOptions, Level, Model } from './types'
 
-const createModel = (model: Model, apiKey?: string, temperature?: number) => createOpenAIChatCompletion({
-  model,
-  temperature: Number(temperature), // :pepeYep:
-}, {
-  apiKey,
-})
+function createModel(model: Model, apiKey?: string, temperature?: number) {
+  return createOpenAIChatCompletion({
+    model,
+    temperature: Number(temperature), // :pepeYep:
+  }, {
+    apiKey,
+  })
+}
 
-const levelPrompts = (level: Level) => {
+function levelPrompts(level: Level) {
   switch (level) {
     case 'Beginner':
       return `The sentences should be simple and easy to understand for beginners,
@@ -21,7 +23,7 @@ const levelPrompts = (level: Level) => {
   }
 }
 
-export const agent = (options: GenerationOptions) => {
+export function agent(options: GenerationOptions) {
   return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(
     () => [
       system`You are a helpful and creative assistant.
