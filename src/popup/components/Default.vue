@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect'
-import { agent2 } from '~/logic/agent'
+import { agentTranslate } from '~/logic/agent'
 import { storage } from '~/logic/storage'
 import { type Tab, languages, levels, models } from '~/logic/types'
 
@@ -60,23 +60,6 @@ const languageSelections = computed(() => [
 ])
 
 async function send() {
-  const result = await agent2(
-    storage.value.openaiApiKey as string,
-    // storage.value.translation,
-  )({ goal: 'read more books' }, { render: true })
-
-  console.log('result', result)
-  storage.value.translation = result.plan
-
-  // const result = await agent2(
-  //   storage.value.openaiApiKey as string,
-  // )({ goal: 'read more books' })
-
-  // console.log('result', result)
-
-  // console.log(result.plan)
-  // storage.value.translation = result.plan
-
   // const result = await agent(
   //   storage.value,
   // )({}, { render: true })
@@ -85,7 +68,12 @@ async function send() {
   // storage.value.definition = result.definition
   // storage.value.definitionTranslated = result.definitionTranslated
 
-  // const sentences = JSON.parse(`[{"sentence": ${result.sentences}]`)
+  // let sentences = []
+
+  // if (result.sentences.startsWith('['))
+  //   sentences = JSON.parse(`${result.sentences}]`)
+  // else
+  //   sentences = JSON.parse(`[{"sentence": ${result.sentences}]`)
 
   // sentencesStorage.value = sentences.map((sentence: any) => ({
   //   sentence: sentence.sentence,
@@ -93,6 +81,13 @@ async function send() {
   //   selected: false,
   //   hovered: false,
   // }))
+
+  if (storage.value.targetLanguage !== storage.value.sourceLanguage) {
+    storage.value.translation = await agentTranslate(
+      storage.value,
+    )({}, { render: true })
+  }
+
 }
 </script>
 

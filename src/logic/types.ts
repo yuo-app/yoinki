@@ -49,7 +49,7 @@ export interface GenerationOptions {
 
 export interface SentencesStorage {
   sentence: string
-  sentenceTranslated: string
-  selected: boolean
-  hovered: boolean
+  sentenceTranslated?: string
+  selected?: boolean
+  hovered?: boolean
 }
