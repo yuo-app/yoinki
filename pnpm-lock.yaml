@@ -65,8 +65,8 @@ devDependencies:
     specifier: ^5.0.1
     version: 5.0.1
   eemoji:
-    specifier: ^1.0.3
-    version: 1.0.3(typescript@5.1.6)
+    specifier: ^1.1.4
+    version: 1.1.4(typescript@5.1.6)
   eslint:
     specifier: ^8.46.0
     version: 8.46.0
@@ -2973,14 +2973,15 @@ packages:
       semver: 7.5.4
     dev: true
 
-  /eemoji@1.0.3(typescript@5.1.6):
-    resolution: {integrity: sha512-M+nyfWuysNYmkaQp5ByZgz89RPFRZ5UEkkv5KZIB1ubhTTC2KuB6kuLhd9lz58ZDEbDKYC/cVrFZNIOKQ4/RZA==}
+  /eemoji@1.1.4(typescript@5.1.6):
+    resolution: {integrity: sha512-n/SVkBGsJblRfxIY29/sVg+FkhqBq3Ski0/VuK3QrLBAto/Fx8m6+b58G/bn6yLZ4wEuaUTqFTtt34dDDImXuA==}
     hasBin: true
     requiresBuild: true
     dependencies:
       citty: 0.1.5
       consola: 3.2.3
       cosmiconfig: 8.3.6(typescript@5.1.6)
+      lodash-es: 4.17.21
     transitivePeerDependencies:
       - typescript
     dev: true
@@ -5371,6 +5372,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       p-locate: 5.0.0
+    dev: true
+
+  /lodash-es@4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
     dev: true
 
   /lodash.defaults@4.2.0:
