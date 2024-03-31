@@ -1,3 +1,5 @@
+import type { ChatCompletionCreateParamsBase } from 'openai/resources/chat/completions'
+
 export const tabs = ['Default', 'Sentences'] as const
 
 export type Tab = typeof tabs[number]
@@ -13,13 +15,6 @@ export const languages = [
 
 export type Language = typeof languages[number]
 
-export const models = [
-  'gpt-3.5-turbo',
-  'gpt-4',
-] as const
-
-export type Model = typeof models[number]
-
 export const levels = [
   'Beginner',
   'Intermediate',
@@ -28,12 +23,32 @@ export const levels = [
 
 export type Level = typeof levels[number]
 
+export const models: ChatCompletionCreateParamsBase['model'][] = [
+  'gpt-4-0125-preview',
+  'gpt-4-turbo-preview',
+  'gpt-4-1106-preview',
+  'gpt-4-vision-preview',
+  'gpt-4',
+  'gpt-4-0314',
+  'gpt-4-0613',
+  'gpt-4-32k',
+  'gpt-4-32k-0314',
+  'gpt-4-32k-0613',
+  'gpt-3.5-turbo',
+  'gpt-3.5-turbo-16k',
+  'gpt-3.5-turbo-0301',
+  'gpt-3.5-turbo-0613',
+  'gpt-3.5-turbo-1106',
+  'gpt-3.5-turbo-0125',
+  'gpt-3.5-turbo-16k-0613',
+]
+
 export interface GenerationOptions {
   [key: string]: string | boolean | number | object | undefined
   openaiApiKey?: string
   bingApiKey?: string
   searchEnabled: boolean
-  selectedModel: Model
+  selectedModel: ChatCompletionCreateParamsBase['model']
   temperature: number
   sourceLanguage: Language
   targetLanguage: Language
@@ -49,7 +64,7 @@ export interface GenerationOptions {
 
 export interface SentencesStorage {
   sentence: string
-  sentenceTranslated: string
-  selected: boolean
-  hovered: boolean
+  sentenceTranslated?: string
+  selected?: boolean
+  hovered?: boolean
 }

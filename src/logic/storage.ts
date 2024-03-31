@@ -6,7 +6,7 @@ export const storage = useStorageLocal<GenerationOptions>(
   {
     level: 'Advanced',
     searchEnabled: false,
-    selectedModel: 'gpt-4',
+    selectedModel: 'gpt-4-turbo-preview',
     temperature: 0.9,
     sentenceCount: 3,
     sourceLanguage: 'English',

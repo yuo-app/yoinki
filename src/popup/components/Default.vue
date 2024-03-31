@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect'
+import OpenAI from 'openai'
+import { agent, agentSentence } from '~/logic/agent'
 import { sentencesStorage, storage } from '~/logic/storage'
-import { agent } from '~/logic/agent'
 import { type Tab, languages, levels, models } from '~/logic/types'
 
 const emit = defineEmits<{
@@ -59,23 +60,47 @@ const languageSelections = computed(() => [
   },
 ])
 
+const openai = new OpenAI({
+  apiKey: storage.value.openaiApiKey,
+  dangerouslyAllowBrowser: true,
+})
+
 async function send() {
-  const result = await agent(
+  // const result = await agent(
+  //   storage.value,
+  // )({}, { render: true })
+
+  // storage.value.translation = result.translation
+  // storage.value.definition = result.definition
+  // storage.value.definitionTranslated = result.definitionTranslated
+
+  // let sentences = []
+
+  // if (result.sentences.startsWith('['))
+  //   sentences = JSON.parse(`${result.sentences}]`)
+  // else
+  //   sentences = JSON.parse(`[{"sentence": ${result.sentences}]`)
+
+  // sentencesStorage.value = sentences.map((sentence: any) => ({
+  //   sentence: sentence.sentence,
+  //   sentenceTranslated: sentence.sentenceTranslated,
+  //   selected: false,
+  //   hovered: false,
+  // }))
+
+  const response = await agent(
+    openai,
     storage.value,
-  )({}, { render: true })
+  )
 
-  storage.value.translation = result.translation
-  storage.value.definition = result.definition
-  storage.value.definitionTranslated = result.definitionTranslated
+  storage.value = { ...storage.value, ...response }
 
-  const sentences = JSON.parse(`[{"sentence": ${result.sentences}]`)
+  const sentences = await agentSentence(
+    openai,
+    storage.value,
+  )
 
-  sentencesStorage.value = sentences.map((sentence: any) => ({
-    sentence: sentence.sentence,
-    sentenceTranslated: sentence.sentenceTranslated,
-    selected: false,
-    hovered: false,
-  }))
+  sentencesStorage.value = sentences
 }
 </script>
 

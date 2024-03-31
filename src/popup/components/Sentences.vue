@@ -6,17 +6,17 @@ const emit = defineEmits<{
   (event: 'changeTab', tab: Tab): void
 }>()
 
-// storage.value.translation = ''
-// storage.value.definition = 'Just a moment... 👍'
-// storage.value.definitionTranslated = ''
-// sentencesStorage.value = []
+storage.value.translation = ''
+storage.value.definition = 'Just a moment... 👍'
+storage.value.definitionTranslated = ''
+sentencesStorage.value = []
 
 function calcHeight(result: SentencesStorage) {
-  if (!result.sentence || !result.sentenceTranslated)
-    return 0
+  const sentenceLength = result.sentence.length
+  const sentenceTranslatedLength = result.sentenceTranslated ? result.sentenceTranslated.length : 0
 
-  const sentenceRows = Math.ceil(result.sentence.length / 35)
-  const sentenceTranslatedRows = Math.ceil(result.sentenceTranslated.length / 35)
+  const sentenceRows = Math.ceil(sentenceLength / 35)
+  const sentenceTranslatedRows = Math.ceil(sentenceTranslatedLength / 35)
 
   return Math.max(sentenceRows, sentenceTranslatedRows) * 30
 }
@@ -62,8 +62,14 @@ function calcHeight(result: SentencesStorage) {
           @mouseleave="result.hovered = false"
         >
           <span
+            v-if="result.sentenceTranslated"
             w-full
             v-html="result.hovered ? result.sentenceTranslated : result.sentence"
+          />
+          <span
+            v-else
+            w-full
+            v-html="result.sentence"
           />
         </div>
       </div>
