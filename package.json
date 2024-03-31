@@ -26,11 +26,15 @@
     "start:firefox": "web-ext run --source-dir ./extension --target=firefox-desktop",
     "clear": "rimraf --glob extension/dist extension/manifest.json extension.*",
     "lint": "eslint --cache .",
+    "lint:fix": "eslint --fix --cache .",
     "test": "vitest test",
     "test:e2e": "playwright test",
     "typecheck": "vite build && tsc --noEmit",
     "postinstall": "simple-git-hooks",
-    "release": "echo 'Don't forget to preview the extension!' && bumpp"
+    "release": "bumpp && pnpm publish"
+  },
+  "dependencies": {
+    "langchain": "0.0.197-rc.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.39.8",
@@ -51,7 +55,7 @@
     "chokidar": "^3.5.3",
     "cross-env": "^7.0.3",
     "crx": "^5.0.1",
-    "devmoji": "^2.3.0",
+    "eemoji": "^1.0.3",
     "eslint": "^8.46.0",
     "esno": "^0.17.0",
     "fs-extra": "^11.1.1",
@@ -77,7 +81,8 @@
     "webextension-polyfill": "^0.10.0"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
+    "pre-commit": "pnpm lint-staged",
+    "prepare-commit-msg": "npx eemoji run"
   },
   "lint-staged": {
     "*": "eslint --fix"
