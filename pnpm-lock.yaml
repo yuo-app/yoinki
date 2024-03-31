@@ -59,9 +59,9 @@ devDependencies:
   crx:
     specifier: ^5.0.1
     version: 5.0.1
-  devmoji:
-    specifier: ^2.3.0
-    version: 2.3.0
+  eemoji:
+    specifier: ^1.0.3
+    version: 1.0.3(typescript@5.1.6)
   eslint:
     specifier: ^8.46.0
     version: 8.46.0
@@ -2337,6 +2337,12 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /citty@0.1.6:
+    resolution: {integrity: sha512-tskPPKEs8D2KPafUypv2gxwJP8h/OaJmC82QQGGDQcHvXX43xF2VDACcJVmZ0EuSxkpO9Kc4MlrA3q0+FG58AQ==}
+    dependencies:
+      consola: 3.2.3
+    dev: true
+
   /clean-regexp@1.0.0:
     resolution: {integrity: sha512-GfisEZEJvzKrmGWkvfhgzcz/BllN1USeqD2V6tg14OAOgaCD2Z/PUEuxnAZ/nPvmaHRG7a8y77p1T/IRQ4D1Hw==}
     engines: {node: '>=4'}
@@ -2447,11 +2453,6 @@ packages:
       graceful-readlink: 1.0.1
     dev: true
 
-  /commander@7.2.0:
-    resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
-    engines: {node: '>= 10'}
-    dev: true
-
   /commander@9.5.0:
     resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
     engines: {node: ^12.20.0 || >=14}
@@ -2530,6 +2531,22 @@ packages:
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
+    dev: true
+
+  /cosmiconfig@8.3.6(typescript@5.1.6):
+    resolution: {integrity: sha512-kcZ6+W5QzcJ3P1Mt+83OUv/oHFqZHIx8DuxG6eZ5RGMERoLqp4BuGjhHLYGK+Kf5XVkQvqBSmAy/nGWN3qDgEA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      typescript: '>=4.9.5'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      import-fresh: 3.3.0
+      js-yaml: 4.1.0
+      parse-json: 5.2.0
+      path-type: 4.0.0
+      typescript: 5.1.6
     dev: true
 
   /crc32-stream@3.0.1:
@@ -2779,15 +2796,6 @@ packages:
     resolution: {integrity: sha512-FJ9RDpf3GicEBvzI3jxc2XhHzbqD8p4ANw/1kPsFBfTvP1b7Gn/Lg1vO7R9J4IVgoMbyUmFrFGZafJ1hPZpvlg==}
     dev: true
 
-  /devmoji@2.3.0:
-    resolution: {integrity: sha512-ErQdYUsE7tKxqDzQzRos6fKWaRIFUOJvMkQODq9iYDI3o5X6nxD78XEdGNYaW5AaJW4uxj+XQTkCuJkV86Qg6g==}
-    hasBin: true
-    dependencies:
-      chalk: 4.1.2
-      commander: 7.2.0
-      ts-interface-checker: 1.0.0
-    dev: true
-
   /diff-sequences@29.4.3:
     resolution: {integrity: sha512-ofrBgwpPhCD85kMKtE9RYFFq6OC1A89oW2vvgWZNCwxrUpRUILopY7lsYyMDSjc8g6U6aiO0Qubg6r4Wgt5ZnA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -2906,6 +2914,18 @@ packages:
       commander: 10.0.1
       minimatch: 9.0.1
       semver: 7.5.4
+    dev: true
+
+  /eemoji@1.0.3(typescript@5.1.6):
+    resolution: {integrity: sha512-M+nyfWuysNYmkaQp5ByZgz89RPFRZ5UEkkv5KZIB1ubhTTC2KuB6kuLhd9lz58ZDEbDKYC/cVrFZNIOKQ4/RZA==}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      citty: 0.1.6
+      consola: 3.2.3
+      cosmiconfig: 8.3.6(typescript@5.1.6)
+    transitivePeerDependencies:
+      - typescript
     dev: true
 
   /emoji-regex@8.0.0:
@@ -6921,10 +6941,6 @@ packages:
       typescript: '>=4.2.0'
     dependencies:
       typescript: 5.1.6
-    dev: true
-
-  /ts-interface-checker@1.0.0:
-    resolution: {integrity: sha512-yUeWbFBDiwPodNqrqpvQpGWheL6PvNu2/pVAb9yy2vzdkkflCgwVA4U2akByPCXzYTum3/5/nB92yKuiLpSo/Q==}
     dev: true
 
   /tslib@1.14.1:
