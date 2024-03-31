@@ -1,17 +1,90 @@
-import { assistant, block, createOpenAIChatCompletion, gen, system, user } from '../../salute/src'
-import type { GenerationOptions, Level, Model } from './types'
+import type OpenAI from 'openai'
+import type { ChatCompletionCreateParamsBase } from 'openai/resources/chat/completions'
+import type { GenerationOptions, Level, SentencesStorage } from './types'
 
 // import { topSnippets } from './search'
 
-function createModel(model: Model, apiKey?: string, temperature?: number) {
-  return createOpenAIChatCompletion({
-    model,
-    stream: true,
-    temperature: Number(temperature), // :pepeYep:
-  }, {
-    apiKey,
-    dangerouslyAllowBrowser: true,
+type MessageRole = 'system' | 'user' | 'assistant'
+interface MessageContent { role: MessageRole; content: string }
+
+function from(options: GenerationOptions, messages: MessageContent[], format: ChatCompletionCreateParamsBase['response_format'] = { type: 'text' }) {
+  return {
+    model: options.selectedModel,
+    response_format: format,
+    temperature: Number(options.temperature),
+    messages,
+  }
+}
+
+function getCompletion(completion: OpenAI.Chat.Completions.ChatCompletion) {
+  console.log(completion.choices[0].message.content)
+  return completion.choices[0].message.content || ''
+}
+
+export async function agent(openai: OpenAI, options: GenerationOptions) {
+  const messages: MessageContent[] = [{
+    role: 'system',
+    content: 'You are a helpful and creative assistant.',
+  },
+  {
+    role: 'user',
+    content: `Here is a word in ${options.sourceLanguage}: ${options.word}.
+    Send a translation for the word in ${options.targetLanguage}. Send only the translation, not sentences.`,
+  }]
+
+  const completionTranslate = await openai.chat.completions.create(from(options, [
+    ...messages,
+  ]))
+
+  const contentTranslate = getCompletion(completionTranslate)
+
+  const chain = messages.concat({
+    role: 'assistant',
+    content: contentTranslate,
   })
+
+  const completionDefinition = await openai.chat.completions.create(from(options, [
+    ...chain,
+    {
+      role: 'user',
+      content: `Define the word (${options.word}) in ${options.sourceLanguage} without using the word itself. Reply with sentences, but keep it short.
+      User's level: ${options.level}`, // TODO: use targetLanguage, sourceLanguage is definitionTranslated
+    },
+  ]))
+
+  return {
+    translation: getCompletion(completionTranslate),
+    definition: getCompletion(completionDefinition),
+    definitionTranslated: '',
+  }
+}
+
+export async function agentSentence(openai: OpenAI, options: GenerationOptions): Promise<SentencesStorage[]> {
+  const completionSentences = await openai.chat.completions.create(from(options, [
+    {
+      role: 'user',
+      content: `Good, now create ${options.sentenceCount} example ${options.sentenceCount > 1 ? 'sentences' : 'sentence'} for the word (${options.word}) in ${options.targetLanguage}.
+      Do not use ${options.sourceLanguage}. Make the word in the sentences bold (like this: <b>${options.word}</b>), even if it's conjugated.
+      ${levelPrompts(options.level)}
+      Also, for every sentence, translate it to ${options.sourceLanguage} and make the word bold in them as well.
+      
+      format:
+      json
+      {
+        "sentences": ["sentence1", "sentence2", ...],
+        "translations": ["translation1", "translation2", ...]
+      }`,
+    },
+  ], { type: 'json_object' }))
+
+  const content = getCompletion(completionSentences)
+
+  return JSON.parse(content).sentences.map((sentence: string, index: number) => ({
+    sentence,
+    sentenceTranslated: JSON.parse(content).translations[index],
+    selected: false,
+    hovered: false,
+  }))
 }
 
 function levelPrompts(level: Level) {
@@ -27,129 +100,129 @@ function levelPrompts(level: Level) {
   }
 }
 
-export function agent(options: GenerationOptions) {
-  return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(
-    () => [
-      system`You are a helpful and creative assistant.
-    `,
-      user`
-      Here is a word in ${options.targetLanguage}: ${options.word}.
+// export function agent(options: GenerationOptions) {
+//   return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(
+//     () => [
+//       system`You are a helpful and creative assistant.
+//     `,
+//       user`
+//       Here is a word in ${options.targetLanguage}: ${options.word}.
 
-      CEFR Level: ${options.level}
-    `,
-      options.sourceLanguage === options.targetLanguage
-        ? []
-        : block(
-          [
-            user`
-            Send a translation for the word in ${options.sourceLanguage}. Send only the translation, not sentences.
-          `,
-            assistant`
-            json
-            {
-              "translation": "${gen('translation', { stop: '"', maxTokens: 30 })}"
-            }
-          `,
-          ],
-        ),
-      user`
-      Define the word (${options.word}) in ${options.targetLanguage} using paraphrasing.
-      Reply with sentences, but keep it short.
-      ${(options.sourceLanguage === options.targetLanguage || !options.sourceLanguageSentence)
-        ? ''
-        : `Do not reply in ${options.sourceLanguage}. Use ${options.targetLanguage}.`}
+//       CEFR Level: ${options.level}
+//     `,
+//       options.sourceLanguage === options.targetLanguage
+//         ? []
+//         : block(
+//           [
+//             user`
+//             Send a translation for the word in ${options.sourceLanguage}. Send only the translation, not sentences.
+//           `,
+//             assistant`
+//             json
+//             {
+//               "translation": "${gen('translation', { stop: '"', maxTokens: 30 })}"
+//             }
+//           `,
+//           ],
+//         ),
+//       user`
+//       Define the word (${options.word}) in ${options.targetLanguage} using paraphrasing.
+//       Reply with sentences, but keep it short.
+//       ${(options.sourceLanguage === options.targetLanguage || !options.sourceLanguageSentence)
+//         ? ''
+//         : `Do not reply in ${options.sourceLanguage}. Use ${options.targetLanguage}.`}
 
-      ${levelPrompts(options.level)}
-    `,
-      assistant`
-      json
-      {
-        "definition": "${gen('definition', { stop: '"', maxTokens: 100 })}
-      }
-    `,
-      (options.sourceLanguage === options.targetLanguage || !options.sourceLanguageDefinition)
-        ? []
-        : block(
-          [
-            user`
-            Send a translation of the definition in ${options.sourceLanguage}. Reply only in ${options.sourceLanguage}.
-          `,
-            assistant`
-            json
-            {
-              "definitionTranslated": "${gen('definitionTranslated', { stop: '}', maxTokens: 100 })}
-            }
-          `,
-          ],
-        ),
-      user`
-      Good, now create ${options.sentenceCount} example ${options.sentenceCount > 1 ? 'sentences' : 'sentence'}
-      for the word (${options.word}) in ${options.targetLanguage}. Do not use ${options.sourceLanguage}.
-      Make the word in the sentences bold (like this: <b>${options.word}</b>), even if it's conjugated.
-      ${(options.sourceLanguage === options.targetLanguage || !options.sourceLanguageSentence)
-        ? ''
-        : `Also, translate the sentences to ${options.sourceLanguage} and make the word bold in them as well.`}
+//       ${levelPrompts(options.level)}
+//     `,
+//       assistant`
+//       json
+//       {
+//         "definition": "${gen('definition', { stop: '"', maxTokens: 100 })}
+//       }
+//     `,
+//       (options.sourceLanguage === options.targetLanguage || !options.sourceLanguageDefinition)
+//         ? []
+//         : block(
+//           [
+//             user`
+//             Send a translation of the definition in ${options.sourceLanguage}. Reply only in ${options.sourceLanguage}.
+//           `,
+//             assistant`
+//             json
+//             {
+//               "definitionTranslated": "${gen('definitionTranslated', { stop: '}', maxTokens: 100 })}
+//             }
+//           `,
+//           ],
+//         ),
+//       user`
+//       Good, now create ${options.sentenceCount} example ${options.sentenceCount > 1 ? 'sentences' : 'sentence'}
+//       for the word (${options.word}) in ${options.targetLanguage}. Do not use ${options.sourceLanguage}.
+//       Make the word in the sentences bold (like this: <b>${options.word}</b>), even if it's conjugated.
+//       ${(options.sourceLanguage === options.targetLanguage || !options.sourceLanguageSentence)
+//         ? ''
+//         : `Also, translate the sentences to ${options.sourceLanguage} and make the word bold in them as well.`}
 
-      ${options.level === 'Beginner' ? 'Don\'t use less than 5 words.' : ''}
+//       ${options.level === 'Beginner' ? 'Don\'t use less than 5 words.' : ''}
 
-      Continue strictly this JSON array format:
-      
-      json
-      [
-        {
-          ${(options.sourceLanguage === options.targetLanguage || !options.sourceLanguageSentence)
-            ? '"sentence": "..."'
-            : '"sentence": "...",\n"sentenceTranslated": "..."'}
-        },
-        ...
-      ]
-      `,
-      assistant`
-      json
-      [
-        {
-          "sentence": ${gen('sentences', { stop: ']', maxTokens: 500 })}
-      `,
-    ],
-  )
-}
+//       Continue strictly this JSON array format:
 
-export function agentTranslate(options: GenerationOptions) {
-  return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(
-    () => [
-      system`You are a helpful and creative assistant.
-    `,
-      user`
-      Here is a word in ${options.targetLanguage}: ${options.word}.
-      Send a translation for the word in ${options.sourceLanguage}. Send only the translation, not sentences.
-    `,
-      assistant`
-      json
-      {
-        "translation": "${gen('translation', { stop: '"', maxTokens: 30 })}"
-      }
-    `,
-    ],
-  )
-}
+//       json
+//       [
+//         {
+//           ${(options.sourceLanguage === options.targetLanguage || !options.sourceLanguageSentence)
+//             ? '"sentence": "..."'
+//             : '"sentence": "...",\n"sentenceTranslated": "..."'}
+//         },
+//         ...
+//       ]
+//       `,
+//       assistant`
+//       json
+//       [
+//         {
+//           "sentence": ${gen('sentences', { stop: ']', maxTokens: 500 })}
+//       `,
+//     ],
+//   )
+// }
 
-export function agentDefine(options: GenerationOptions) {
-  return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(
-    () => [
-      system`You are a helpful and creative assistant.
-    `,
-    ],
-  )
-}
+// export function agentTranslate(options: GenerationOptions) {
+//   return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(
+//     () => [
+//       system`You are a helpful and creative assistant.
+//     `,
+//       user`
+//       Here is a word in ${options.targetLanguage}: ${options.word}.
+//       Send a translation for the word in ${options.sourceLanguage}. Send only the translation, not sentences.
+//     `,
+//       assistant`
+//       json
+//       {
+//         "translation": "${gen('translation', { stop: '"', maxTokens: 30 })}"
+//       }
+//     `,
+//     ],
+//   )
+// }
 
-export function agentSentence(options: GenerationOptions) {
-  return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(
-    () => [
-      system`You are a helpful and creative assistant.
-    `,
-    ],
-  )
-}
+// export function agentDefine(options: GenerationOptions) {
+//   return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(
+//     () => [
+//       system`You are a helpful and creative assistant.
+//     `,
+//     ],
+//   )
+// }
+
+// export function agentSentence(options: GenerationOptions) {
+//   return createModel(options.selectedModel, options.openaiApiKey, options.temperature)(
+//     () => [
+//       system`You are a helpful and creative assistant.
+//     `,
+//     ],
+//   )
+// }
 
 // "From now on, whenever your response depends on any factual information, please search the web by using the function
 // <search>query</search> before responding. I will then paste web results in, and you can respond.",

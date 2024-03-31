@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Multiselect from '@vueform/multiselect'
-import { agentTranslate } from '~/logic/agent'
-import { storage } from '~/logic/storage'
+import OpenAI from 'openai'
+import { agent, agentSentence } from '~/logic/agent'
+import { sentencesStorage, storage } from '~/logic/storage'
 import { type Tab, languages, levels, models } from '~/logic/types'
 
 const emit = defineEmits<{
@@ -59,6 +60,11 @@ const languageSelections = computed(() => [
   },
 ])
 
+const openai = new OpenAI({
+  apiKey: storage.value.openaiApiKey,
+  dangerouslyAllowBrowser: true,
+})
+
 async function send() {
   // const result = await agent(
   //   storage.value,
@@ -82,12 +88,19 @@ async function send() {
   //   hovered: false,
   // }))
 
-  if (storage.value.targetLanguage !== storage.value.sourceLanguage) {
-    storage.value.translation = await agentTranslate(
-      storage.value,
-    )({}, { render: true })
-  }
+  const response = await agent(
+    openai,
+    storage.value,
+  )
 
+  storage.value = { ...storage.value, ...response }
+
+  const sentences = await agentSentence(
+    openai,
+    storage.value,
+  )
+
+  sentencesStorage.value = sentences
 }
 </script>
 
