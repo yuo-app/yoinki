@@ -47,7 +47,7 @@ export async function agent(openai: OpenAI, options: GenerationOptions) {
     ...chain,
     {
       role: 'user',
-      content: `Define the word (${options.word}) in ${options.sourceLanguage} without using the word itself. Reply with sentences, but keep it short.
+      content: `Define the word (${contentTranslate}) in ${options.sourceLanguage}. Reply with sentences, but keep it short.
       User's level: ${options.level}`, // TODO: use targetLanguage, sourceLanguage is definitionTranslated
     },
   ]))
